@@ -36,6 +36,13 @@ def main():
  import lumflux
  import andNEDredshift
  
+ #############  Constants
+ ##cc=speed_of_light
+ ##ckm=cc/1000 ## km/s
+ ##ccm=cc*100 ## cm/s
+ ##cca=cc*10**10 ##angstrom /s
+ ##zpab=8.926    ## zp for flux in Jy
+ 
  ############ get input
  
  modelfile = sys.argv[1]
@@ -45,29 +52,28 @@ def main():
  sameunit  = str(sameunit)
  redshift  = float(redshift)
  
- 
+ # handle paths
  if not os.path.isfile(modelfile):
        sys.exit("ERROR: Specified file not found: %s" % modelfile)
        
- if not os.path.isdir(mypath):
-       sys.exit("ERROR: Specified directory not found: %s" % mypath)
- 
- #############  Constants
- ##cc=speed_of_light
- ##ckm=cc/1000 ## km/s
- ##ccm=cc*100 ## cm/s
- ##cca=cc*10**10 ##angstrom /s
- ##zpab=8.926    ## zp for flux in Jy
- 
+ # (_, _, filenames) = walk(mypath).next()                             # get files in path using walk
+ # onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))] # using listdir
+  
+ 		
+ if os.path.isfile(mypath):
+    (dirpath, file) = os.path.split(mypath)
+    filenames=[file]    
+ elif os.path.isdir(mypath):
+	(dirpath, dirnames, filenames) = walk(mypath).next()
+ else:
+      sys.exit("ERROR: Specified file/directory not found: %s" % mypath)
+   
  def full_path(filepath):
      if platform.system() == 'Windows':
          if filepath[1:3] == ':\\':
              return u'\\\\?\\' + os.path.normcase(filepath)
      return os.path.normcase(filepath)
     
- 
-#subprocess.call("python ifultra.py trasm/Generic_Cousins.R.dat trasm/Generic_Cousins.R.dat")
-
  def angtomic(lamm,sameunit):
       if sameunit in ("y"):
          lamm=lamm/1.
@@ -96,19 +102,19 @@ def main():
 
  #---------------------------------------------------------
  # get trasmission files
- # (_, _, filenames) = walk(mypath).next()                             # get files in path using walk
- # onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))] # using listdir
- (dirpath, dirnames, filenames) = walk(mypath).next() 
- 
- # get trasm files only
- trasmfiles=[]
- for f in filenames:
-   if fnmatch.fnmatch(f, '*.dat'):
-      trasmfiles.append(f)
+ # get trasm files only (dat extension only)
+ #trasmfiles=[]
+ #for f in filenames:
+ #  if fnmatch.fnmatch(f, '*.dat'):
+ #	print f
+ #	trasmfiles.append(f)
  
  # cycle over transmissions and give photometry
  print '--CYCLE over transmissions and give photometry--'
- for tr in trasmfiles: 
+ #for tr in trasmfiles: 
+ for tr in filenames: 
+     # get trasm files only (dat extension only)
+     if fnmatch.fnmatch(tr, '*.dat'):
 	trasm=join(dirpath,tr)
         print trasm
 	#print '------------------ READ FILE -----------------'
@@ -118,12 +124,12 @@ def main():
 	flut=tar[:,1]              
 
 	# integrate over trasmission
-	integ=ift.main(lamz,fmod,lamt,flut) 
-	#leff=integ[0]
-	#bpass=integ[1]
-	#flux=integ[2]
+	phot=ift.main(lamz,fmod,lamt,flut) 
+	leff=phot[0]
+	bpass=phot[1]
+	flux=phot[2]
 	#
-	#print flux
+	print flux
 	
 
  print '------------------ save data -----------------'

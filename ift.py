@@ -32,7 +32,7 @@ def main(lamm,flum,lamt,flut):
  ## interpolate transmisison to cover same lambda intervals
  ## interpolate model to cover same lambda intervals
  ## Create interpolating function 
- tti=interp1d(lamt,flut)
+ #tti=interp1d(lamt,flut)
  mmi=interp1d(lamm,flum)
  
  moint=[]
