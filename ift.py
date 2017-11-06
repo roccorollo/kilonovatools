@@ -46,9 +46,6 @@ def main(lamm,flum,lamt,flut):
  
  print '------------------ COMPUTE INTEGRAL -----------------'
  
- #maximum of transmission is
- smax=1 #max(flut)
-  
  # filter characteristics:
  ltr=flut*lamt
  tint = integ(flut,lamt) # surface
@@ -57,10 +54,10 @@ def main(lamm,flum,lamt,flut):
  dint = 2*(integ(delta,lamt) /tint)**(0.5)  # whole bandpass
  
  # Compute flux averaged in the transmission :
- #ymt=moint*flut       
- #imt = integ(ymt,lamt)  
- flav=1
- #flav=imt/tint# averaged flux
+ ymt=moint*flut       
+ imt = integ(ymt,lamt)  
+ #flav=1
+ flav=imt/tint# averaged flux
  
  
  # result
