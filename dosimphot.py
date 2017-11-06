@@ -78,7 +78,7 @@ def main():
       if sameunit in ("y"):
          lamm=lamm/1.
       else :
-         lamm=lamm/1e4        
+         lamm=lamm*1e4        
       return lamm                    
      
  def trasmpos(flum):
@@ -93,7 +93,7 @@ def main():
  mar=mar[mar[:,0].argsort()]
  lamm=mar[:,0] ## be sure that lambda unit is the same
  lum=mar[:,1] 
- lamm=angtomic(lamm,sameunit)  ## transform lambda model to angstrom if necessary
+ #lamm=angtomic(lamm,sameunit)  ## transform lambda model to angstrom if necessary
  lum=trasmpos(lum)
  # shift lambda to redshift
  lamz=lamm*(1+redshift)
@@ -121,15 +121,21 @@ def main():
 	tar=loadtxt(trasm)
         tar=tar[tar[:,0].argsort()]
 	lamt=tar[:,0] ## be sure that lambda unit is the same
+	lamt=angtomic(lamt,sameunit)
 	flut=tar[:,1]              
 
 	# integrate over trasmission
 	phot=ift.main(lamz,fmod,lamt,flut) 
-	leff=phot[0]
+	leff=phot[0]   # micron
+	#aleff=angtomic(leff,sameunit)
 	bpass=phot[1]
-	flux=phot[2]
+	flux=phot[2]   # fergc2sA
+	fjy=lumflux.fergc2sA2fjy(flux,leff)
+	magab=lumflux.fjy2mab(fjy)
 	#
-	print flux
+	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
+	print '%1.2e' %  flux + ' flux in erg/cm^2/s/Ang'
+	print '%2.1f' %  magab + ' mag in AB'
 	
 
  print '------------------ save data -----------------'

@@ -5,7 +5,7 @@ Take spectra template and trasmission, and computes observed mag at given distan
 
 __Version__ = "0.1"
 __Author__ = "Andrea Rossi "
-__Usage__ = "dosimphot.py model trasmission y_for_angstrom_else_mic"
+__Usage__ = "dosimphot.py data modelname redshift"
 
 import sys
 def usage():
