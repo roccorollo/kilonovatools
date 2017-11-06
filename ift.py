@@ -58,8 +58,7 @@ def main(lamm,flum,lamt,flut):
  imt = integ(ymt,lamt)  
  #flav=1
  flav=imt/tint# averaged flux
- 
- 
+  
  # result
  res=[0*x for x in range (0,3)]
  res[0]=lef

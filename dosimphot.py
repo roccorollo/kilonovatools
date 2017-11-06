@@ -2,15 +2,19 @@
 
 '''
 Take spectra template and trasmission, and computes observed mag at given distance
+Usage "dosimphot.py model path_trasmission y_for_angstrom_else_mic redshift"
 '''
 
 __Version__ = "0.1"
 __Author__ = "Andrea Rossi "
-__Usage__ = "dosimphot.py model path_trasmission y_for_angstrom_else_mic  redshift"
+__Usage__ = "dosimphot.py model path_trasmission y_for_angstrom_else_mic redshift"
+__Notes__ = "if transmission is out of interval is not used"
 
 import sys
 def usage():
-    print __Usage__
+    print __doc__
+    #print __Usage__
+    #print __Notes__
 
 def main():
  	
@@ -53,7 +57,9 @@ def main():
  redshift  = float(redshift)
  
  # handle paths
- if not os.path.isfile(modelfile):
+ if os.path.isfile(modelfile):
+	(dirmod, modname)=os.path.split(modelfile)
+ else:	 
        sys.exit("ERROR: Specified file not found: %s" % modelfile)
        
  # (_, _, filenames) = walk(mypath).next()                             # get files in path using walk
@@ -73,7 +79,8 @@ def main():
          if filepath[1:3] == ':\\':
              return u'\\\\?\\' + os.path.normcase(filepath)
      return os.path.normcase(filepath)
-    
+ 
+ # define special functions    
  def angtomic(lamm,sameunit):
       if sameunit in ("y"):
          lamm=lamm/1.
@@ -90,15 +97,15 @@ def main():
  
  #--------------------- Read model file
  mar=loadtxt(modelfile)
- mar=mar[mar[:,0].argsort()]
+ mar=mar[mar[:,0].argsort()]   # ascending order
  lamm=mar[:,0] ## be sure that lambda unit is the same
  lum=mar[:,1] 
  #lamm=angtomic(lamm,sameunit)  ## transform lambda model to angstrom if necessary
  lum=trasmpos(lum)
- # shift lambda to redshift
+ # shift lambda to obs frame and considerredshift
  lamz=lamm*(1+redshift)
- # shift model to redshift!!
- fmod=lumflux.l2fergc2sA(lum,distlum)
+ # shift model to obs frame and consider redshift!!
+ fmod=lumflux.l2fergc2sA(lum,distlum)/(1+redshift)
 
  #---------------------------------------------------------
  # get trasmission files
@@ -109,19 +116,29 @@ def main():
  #	print f
  #	trasmfiles.append(f)
  
+ 
+ # initialize output data
+ testfile=modname+'z'+str(redshift)+'_phot.dat'
+ out=open(testfile,'w')
+ header='#lambda[A]      f[Jy]      mag[AB]     name'
+ out.write('%s\n' %header) 
+ 
  # cycle over transmissions and give photometry
  print '--CYCLE over transmissions and give photometry--'
  #for tr in trasmfiles: 
+ photarr=[]
+ 
  for tr in filenames: 
-     # get trasm files only (dat extension only)
-     if fnmatch.fnmatch(tr, '*.dat'):
-	trasm=join(dirpath,tr)
+   # get trasm files only (dat extension only)
+   if fnmatch.fnmatch(tr, '*.dat'):
+     trasm=join(dirpath,tr)
+     #print '------------------ READ FILE -----------------'
+     tar=loadtxt(trasm)
+     tar=tar[tar[:,0].argsort()]    # ascending order
+     lamt=tar[:,0] ## be sure that lambda unit is the same
+     lamt=angtomic(lamt,sameunit)
+     if max(lamt) < max(lamz) and min(lamt) > min(lamz) :
         print trasm
-	#print '------------------ READ FILE -----------------'
-	tar=loadtxt(trasm)
-        tar=tar[tar[:,0].argsort()]
-	lamt=tar[:,0] ## be sure that lambda unit is the same
-	lamt=angtomic(lamt,sameunit)
 	flut=tar[:,1]              
 
 	# integrate over trasmission
@@ -132,31 +149,39 @@ def main():
 	flux=phot[2]   # fergc2sA
 	fjy=lumflux.fergc2sA2fjy(flux,leff)
 	magab=lumflux.fjy2mab(fjy)
-	#
+	photarr.append((leff,fjy,tr))
+		
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
-	print '%1.2e' %  flux + ' flux in erg/cm^2/s/Ang'
+	#print '%1.2e' %  flux + ' flux in erg/cm^2/s/Ang'
 	print '%2.1f' %  magab + ' mag in AB'
+	out.write('%4.4f\t%2.7e\t%2.2f\t%s\n' %(leff,fjy,magab,tr))
+     else:
+        print '--' + trasm+' outside filter range'
+	photarr.append(('-99','-99','-99',tr))	
+        out.write('%2.0f\t%2.0f\t%2.0f\t%s\n' %(-99,-99,-99,tr))
 	
-
- print '------------------ save data -----------------'
- ln=len(lamz)
- n=int(ln)
- j=0
- testfile='test.txt'
- out=open(testfile,'w')
- #lb=[0*x for x in range (0,int(ln))]
- #mb=[0*x for x in range (0,int(ln))]
-
- #while j<=n-1:
- #        out.write('%4.4f\t%2.7e\n' %(lamz[j],flux[j]))
- #        #print lamm[j],lummod[j],j
- #        j=j+1
- #
  out.close
+ 
+ print photarr	 
 
-
+#print '------------------ save data -----------------'
+#testfile='test.txt'
+#out=open(testfile,'w')
+##lb=[0*x for x in range (0,int(ln))]
+##mb=[0*x for x in range (0,int(ln))]
 #
+#j=0
+#nf=len(filenames)
+# while j<=nf-1:
+#       #print j
+#	out.write('%4.4f\t%2.7e\t%s\n' %(photarr[j][0],photarr[j][1],photarr[j][2]))
+#	j=j+1
+#
+#out.close
+#
+#
+
 if __name__ == "__main__":
-    main()
+   main()
 
 

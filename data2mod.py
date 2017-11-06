@@ -76,7 +76,7 @@ def main():
    
  
 # from data to luminosity in erg/s/A
- lummod=lumflux.fergc2sA2luma(flum,distlum)
+ lummod=lumflux.fergc2sA2luma(flum,distlum)*(1+redshift)
  lamm=lamz/(1+redshift) ## be sure that lambda unit is the same
 
  #print 'lum distance is ' + '%1.3f' %  distlum
