@@ -13,10 +13,10 @@ from scipy.constants import speed_of_light
 
 def distlum(redshift):
   
-# if no values, assume Benchmark Model, input is z
+# if no values, assume Benchmark Model, input is z from Planck collaboration 2016  (and Gompertz too)
   z=float(redshift)            # redshift
-  H0 = 67.15                         # Hubble constant
-  WM = 0.317                        # Omega(matter)
+  H0 = 67.8                         # Hubble constant
+  WM = 0.308                        # Omega(matter)
   WV = 1.0 - WM - 0.4165/(H0*H0)  # Omega(vacuum) or lambda
 
 # initialize constants

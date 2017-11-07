@@ -139,6 +139,7 @@ def main():
      #print '------------------ READ FILE -----------------'
      tar=loadtxt(trasm)
      tar=tar[tar[:,0].argsort()]    # ascending order
+     tar=tar[tar[:,1]>1e-2]         # only lambda for >1% transmission
      lamt=tar[:,0] ## be sure that lambda unit is the same
      lamt=angtomic(lamt,sameunit)
      if max(lamt) < max(lamz) and min(lamt) > min(lamz) :
