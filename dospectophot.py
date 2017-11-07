@@ -7,7 +7,7 @@ Usage "dosimphot.py model path_trasmission y_for_angstrom_else_mic redshift"
 
 __Version__ = "0.1"
 __Author__ = "Andrea Rossi "
-__Usage__ = "dosimphot.py model path_trasmission y_for_angstrom_else_mic redshift"
+__Usage__ = "dosimphot.py spectra path_trasmission angstrom_else_mic"
 __Notes__ = "if transmission is out of interval is not used"
 
 import sys
@@ -49,12 +49,10 @@ def main():
  
  ############ get input
  
- modelfile = sys.argv[1]
+ specfile = sys.argv[1]
  mypath    = sys.argv[2]
  sameunit  = sys.argv[3]
- redshift  = sys.argv[4]
  sameunit  = str(sameunit)
- redshift  = float(redshift)
  
  # define special functions    
  def angtomic(lamm,sameunit):
@@ -73,10 +71,10 @@ def main():
  checkunit=angtomic(1,sameunit)
 
  # handle paths
- if os.path.isfile(modelfile):
-	(dirmod, modname)=os.path.split(modelfile)
+ if os.path.isfile(specfile):
+	(dirspec, specname)=os.path.split(specfile)
  else:	 
-       sys.exit("ERROR: Specified file not found: %s" % modelfile)
+       sys.exit("ERROR: Specified file not found: %s" % specfile)
        
  # (_, _, filenames) = walk(mypath).next()                             # get files in path using walk
  # onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))] # using listdir
@@ -95,34 +93,18 @@ def main():
          if filepath[1:3] == ':\\':
              return u'\\\\?\\' + os.path.normcase(filepath)
      return os.path.normcase(filepath)
- 
- # compute distance lum
- distlum=andNEDredshift.distlum(redshift)
- 
+  
  #--------------------- Read model file
- mar=loadtxt(modelfile)
+ mar=loadtxt(specfile)
  mar=mar[mar[:,0].argsort()]   # ascending order
  lamm=mar[:,0] ## be sure that lambda unit is the same
- lum=mar[:,1] 
- #lamm=angtomic(lamm,sameunit)  ## transform lambda model to angstrom if necessary
- lum=trasmpos(lum)
- # shift lambda to obs frame and considerredshift
- lamz=lamm*(1+redshift)
- # shift model to obs frame and consider redshift!!
- fmod=lumflux.l2fergc2sA(lum,distlum)/(1+redshift)
+ fmod=mar[:,1] 
+ fmod=trasmpos(fmod)
 
  #---------------------------------------------------------
- # get trasmission files
- # get trasm files only (dat extension only)
- #trasmfiles=[]
- #for f in filenames:
- #  if fnmatch.fnmatch(f, '*.dat'):
- #	print f
- #	trasmfiles.append(f)
- 
  
  # initialize output data
- testfile=modname+'z'+str(redshift)+'_phot.dat'
+ testfile=specname+'_phot.dat'
  out=open(testfile,'w')
  header='#lambda[A]      f[Jy]      mag[AB]     name'
  out.write('%s\n' %header) 
@@ -141,12 +123,12 @@ def main():
      tar=tar[tar[:,0].argsort()]    # ascending order
      lamt=tar[:,0] ## be sure that lambda unit is the same
      lamt=angtomic(lamt,sameunit)
-     if max(lamt) < max(lamz) and min(lamt) > min(lamz) :
+     if max(lamt) < max(lamm) and min(lamt) > min(lamm) :
         print trasm
         flut=tar[:,1]              
 
         # integrate over trasmission
-        phot=ift.main(lamz,fmod,lamt,flut)
+        phot=ift.main(lamm,fmod,lamt,flut)
         leff=phot[0]   # micron
 	#aleff=angtomic(leff,sameunit)
 	bpass=phot[1]
@@ -154,7 +136,7 @@ def main():
         fjy=lumflux.fergc2sA2fjy(flux,leff)
         magab=lumflux.fjy2mab(fjy)
         photarr.append((leff,fjy,magab,tr))
-	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
+	print '%1.2f' %  leff + ' effective wavelength in spectral unit'
         #print '%1.2e' %  flux + ' flux in erg/cm^2/s/Ang'
         print '%2.1f' %  magab + ' mag in AB'
         out.write('%4.4f\t%2.7e\t%2.2f\t%s\n' %(leff,fjy,magab,tr))
@@ -162,13 +144,14 @@ def main():
         print '--' + trasm+' outside filter range'
 	photarr.append((nd,nd,nd,tr))
         out.write('%2.0f\t%2.0f\t%2.0f\t%s\n' %(-99,-99,-99,tr))
-	
+ 
+ # close output file	 
  out.close
  
- print photarr	 
-
+ print photarr	 # check result
 
 if __name__ == "__main__":
+   usage()
    main()
 
 

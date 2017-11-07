@@ -7,7 +7,7 @@ Usage "dosimphot.py model path_trasmission y_for_angstrom_else_mic redshift"
 
 __Version__ = "0.1"
 __Author__ = "Andrea Rossi "
-__Usage__ = "dosimphot.py model path_trasmission y_for_angstrom_else_mic redshift"
+__Usage__ = "dosimphot.py model path_trasmission angstrom_else_mic redshift"
 __Notes__ = "if transmission is out of interval is not used"
 
 import sys
@@ -185,6 +185,7 @@ def main():
 #
 
 if __name__ == "__main__":
+   usage()
    main()
 
 
