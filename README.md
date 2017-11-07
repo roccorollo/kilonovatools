@@ -11,10 +11,13 @@ several functions to ttransform between luminosity, flux desities and magnitudes
 used to integrate filter over model
 
 ### data2mod.py  
-used to trasfrom data to model (e.g. an observed spectra )
+used to trasfrom data to model (e.g. an observed spectra in flux density to luminosity )
 
 ### dosimphot.py  
-used to simulate photmetry from models
+used to simulate photmetry from spectral models
+
+### dospectophot.py
+tool to convolve spectral data with filters in obs frame
 
 ### folder  trasm
 transmission of sevral filters from hyperz ad svo (microns)
