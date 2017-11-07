@@ -33,17 +33,17 @@ zpab=8.926    ## zp for flux in Jy
 ##---------------------------------------------------------
 ## constants
  
-def luma2fjy(ang,luma,mpc):
+def luma2fjy(ang,luma,mpc,z):
     lumh=luma*(ang**2)/cca
-    fjy=10**23* lumh / ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 )
+    fjy=10**23* lumh / ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) * (1+z)
     return fjy
  
 def fjy2mab(fjy):
      mab=-2.5 * ( log10(fjy)) + zpab 
      return mab
      
-def l2fergc2sA(luma,mpc):
-     fergc2sA=luma / ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 )
+def l2fergc2sA(luma,mpc,z):
+     fergc2sA=luma / ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) / (1+z)
      return fergc2sA
      
 def fergc2sA2fjy(fergc2sA,ang):
@@ -52,8 +52,8 @@ def fergc2sA2fjy(fergc2sA,ang):
      
 #------------reverse
 
-def fjy2luma(ang,fjy,mpc):
-     lumh=fjy*10**(-23) * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 )  
+def fjy2luma(ang,fjy,mpc,z):
+     lumh=fjy*10**(-23) * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) / (1+z)
      luma=lumh*cca/(ang**2)
      return luma
      
@@ -61,10 +61,14 @@ def mab2fjy(mab):
      fjy=10**((mab-zpab)/(-2.5))
      return fjy
 
-def fergc2sA2luma(fergc2sA,mpc):
-     luma= fergc2sA * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 )
+def fergc2sA2luma(fergc2sA,mpc,z):
+     luma= fergc2sA * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) * (1+z)
      return luma
 
+def fjy2fergc2sA(fjy,ang):
+    fergc2sA =fjy* 10**(-23)*cca/(ang**2)
+    return fergc2sA
+     
 
 #
 #if __name__ == "__main__":

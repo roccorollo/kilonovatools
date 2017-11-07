@@ -109,7 +109,7 @@ def main():
  # shift lambda to obs frame and considerredshift
  lamz=lamm*(1+redshift)
  # shift model to obs frame and consider redshift!!
- fmod=lumflux.l2fergc2sA(lum,distlum,redshift)                # already included /(1+redshift)
+ fmod=lumflux.l2fergc2sA(lum,distlum)/(1+redshift)
 
  #---------------------------------------------------------
  # get trasmission files
@@ -167,22 +167,6 @@ def main():
  
  print photarr	 
 
-#print '------------------ save data -----------------'
-#testfile='test.txt'
-#out=open(testfile,'w')
-##lb=[0*x for x in range (0,int(ln))]
-##mb=[0*x for x in range (0,int(ln))]
-#
-#j=0
-#nf=len(filenames)
-# while j<=nf-1:
-#       #print j
-#	out.write('%4.4f\t%2.7e\t%s\n' %(photarr[j][0],photarr[j][1],photarr[j][2]))
-#	j=j+1
-#
-#out.close
-#
-#
 
 if __name__ == "__main__":
    main()
