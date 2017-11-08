@@ -1,3 +1,11 @@
+"""
+
+    Author: G. Stratta
+
+    Purpose: load data of short GRB afterglow from mysql data base on gravitwon
+    
+"""
+
 import os
 import numpy as np
 import pandas as pd
