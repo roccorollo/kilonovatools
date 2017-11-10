@@ -111,6 +111,22 @@ def main():
  # shift model to obs frame and consider redshift!!
  fmod=lumflux.l2fergc2sA(lum,distlum,redshift)                # already included /(1+redshift)
 
+ 
+ #------------- extract PARAMATER for date
+ headsf=[]
+ with open(specfile, 'r') as sf:
+  for line in sf:
+    if line.startswith('#'):
+      headsf.append(line)         
+      
+ mjd=headsf[1].split()[3]  # mjd date from specfile
+  
+ # initialize output data
+ testfile=modname+'z'+str(redshift)+'_phot.dat'
+ out=open(testfile,'w')
+ header='#lambda[A]      f[Jy]      mag[AB]     name'
+ out.write('%s\n' %header) 
+ 
  #---------------------------------------------------------
  # get trasmission files
  # get trasm files only (dat extension only)
@@ -119,13 +135,6 @@ def main():
  #  if fnmatch.fnmatch(f, '*.dat'):
  #	print f
  #	trasmfiles.append(f)
- 
- 
- # initialize output data
- testfile=modname+'z'+str(redshift)+'_phot.dat'
- out=open(testfile,'w')
- header='#lambda[A]      f[Jy]      mag[AB]     name'
- out.write('%s\n' %header) 
  
  # cycle over transmissions and give photometry
  print '--CYCLE over transmissions and give photometry--'
@@ -154,15 +163,15 @@ def main():
 	flux=phot[2]   # fergc2sA
         fjy=lumflux.fergc2sA2fjy(flux,leff)
         magab=lumflux.fjy2mab(fjy)
-        photarr.append((leff,fjy,magab,tr))
+        photarr.append((leff,fjy,magab,tr,mjd))
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
         #print '%1.2e' %  flux + ' flux in erg/cm^2/s/Ang'
         print '%2.1f' %  magab + ' mag in AB'
-        out.write('%4.4f\t%2.7e\t%2.2f\t%s\n' %(leff,fjy,magab,tr))
+        out.write('%4.4f\t%2.7e\t%2.2f\t%s\t%s\n' %(leff,fjy,magab,tr,mjd))
      else:
         print '--' + trasm+' outside filter range'
-	photarr.append((nd,nd,nd,tr))
-        out.write('%2.0f\t%2.0f\t%2.0f\t%s\n' %(-99,-99,-99,tr))
+	photarr.append((nd,nd,nd,tr,mjd))
+        out.write('%2.0f\t%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,-99,tr,mjd))
 	
  out.close
  

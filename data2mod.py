@@ -90,7 +90,11 @@ def main():
  out=open(modelfile,'w')
  #lb=[0*x for x in range (0,int(ln))]
  #mb=[0*x for x in range (0,int(ln))]
-
+ 
+ header1='#PARAMETER MJD'
+ header2='#lambda[A]      L[erg/s/A]'
+ out.write('%s\n' %header1) 
+ out.write('%s\n' %header2) 
  
  while j<=n-1:
          out.write('%4.4f\t%2.7e\n' %(lamm[j],lummod[j]))

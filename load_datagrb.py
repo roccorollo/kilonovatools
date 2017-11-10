@@ -29,3 +29,7 @@ dhour=data_array[:,2]
 filt=data_array[:,3]
 
 data_grb=data_array[np.where(data_array[:,0]=='130603B'),:]
+
+
+
+
