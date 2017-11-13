@@ -30,7 +30,7 @@ def main():
 	redshift  = float(redshift)
 	filters = str(filters).split(',')     # filters
 	
-	models='gw170817fromXSdata/'
+	models='gw170817fromXSdata/kn170817model_43p66mpc_newXSGW0818_smooth.dat'
 	trasm='trasm/R_Cousins.dat'
 	trangmic='mic'
 	

@@ -147,7 +147,7 @@ def main():
      # shit transm to redshift
      lamt=lamt/(1+redshift)
      # check if shifted trnasmisison is within data
-     if max(lamt) <= max(lamm) and min(lamm) >= min(lamm) :
+     if max(lamt) <= max(lamm) and min(lamt) >= min(lamm) :
         print trasm
         flut=tar[:,1]              
         # integrate over trasmission

@@ -2,7 +2,7 @@
 
 '''
 Take spectra template and trasmission, and computes luminosity at shifted trasmission in restframe
-Usage "dogrbsimlum.py model path_trasmission y_for_angstrom_else_mic redshift"
+Usage "dogrbsimlum.py model path_trasmission angstrom_or_mic redshift"
 '''
 
 __Version__ = "0.1"
@@ -16,7 +16,7 @@ def usage():
     #print __Usage__
     #print __Notes__
 
-def main():
+def main( modelfile,mytrasm, sameunit, redshift, filterset):
  	
  ##---------------------------------------------------------
  #Import packages
@@ -44,13 +44,11 @@ def main():
  
  # get input
  
- modelfile = sys.argv[1]
- mypath    = sys.argv[2]
- sameunit  = sys.argv[3]
- redshift  = sys.argv[4]
+ filterset = str(filterset)     # filter
  sameunit  = str(sameunit)
  redshift  = float(redshift)
  
+
  # define special functions    
  def angtomic(lamm,sameunit):
       if sameunit in ("angstrom"):
@@ -73,23 +71,14 @@ def main():
  else:	 
        sys.exit("ERROR: Specified file not found: %s" % modelfile)
  		
- if os.path.isfile(mypath):
-    (dirpath, file) = os.path.split(mypath)
-    filenames=[file]    
- elif os.path.isdir(mypath):
-	(dirpath, dirnames, filenames) = walk(mypath).next()
+ if os.path.isfile(mytrasm):
+    (dirpath, file) = os.path.split(mytrasm)
+    filenames=[file]
+ elif os.path.isdir(mytrasm):
+	(dirpath, dirnames, filenames) = walk(mytrasm).next()
  else:
-      sys.exit("ERROR: Specified file/directory not found: %s" % mypath)
-   
- def full_path(filepath):
-     if platform.system() == 'Windows':
-         if filepath[1:3] == ':\\':
-             return u'\\\\?\\' + os.path.normcase(filepath)
-     return os.path.normcase(filepath)
- 
- # compute distance lum
- distlum=andNEDredshift.distlum(redshift)
- 
+      sys.exit("ERROR: Specified file/directory not found: %s" % mytrasm)
+
  #--------------------- Read model file
  mar=loadtxt(modelfile)
  mar=mar[mar[:,0].argsort()]   # ascending order
@@ -100,15 +89,15 @@ def main():
   
  #------------- extract PARAMATER for date
  headsf=[]
- with open(modelfile, 'r') as sf:
-  for line in sf:
-    if line.startswith('#'):
+ with open(modelfile, 'r') as sf: 
+  for line in sf:                 
+    if line.startswith('#'):       
       headsf.append(line)         
       
- mjd=headsf[1].split()[3]  # mjd date from specfile
+ mjdmod=headsf[1].split()[3]  # mjd date from specfile 
   
  # initialize output data
- testfile=modname+'z'+str(redshift)+'_phot.dat'
+ testfile='test'         #modname+'z'+str(redshift)+'_phot.dat'
  out=open(testfile,'w')
  header='#lambda[A]      f[Jy]      mag[AB]     name'
  out.write('%s\n' %header) 
@@ -116,15 +105,34 @@ def main():
  #---------------------------------------------------------
  # get trasmission files
  
+ #get only names in a list
+ archivedfilternames=[]
+ extension='.dat'
+ for f in filenames:
+	 if fnmatch.fnmatch(f,'*'+extension):
+		 archivedfilternames.append(os.path.splitext(f)[0])
+	 
+ #print "archived filter names", archivedfilternames
+ 
+ # compare two lists and get only matching filters
+ usedfilters=[]
+ for f in [filterset]:
+	 #print f
+	 if f in archivedfilternames:
+		 print 'filter exists: %s' % f
+		 usedfilters.append(f)
+	 else:
+		 sys.exit("ERROR: Specified filter not found: %s" % f)
+  
  # cycle over transmissions and give photometry
- print '--CYCLE over transmissions and give photometry--'
- #for tr in trasmfiles: 
+ print '--CYCLE over filters used by GRB and give photometry--'
+ 
  photarr=[]
- nd=int(-99) 
- for tr in filenames: 
+ nd=int(-99)                    # in case is not defined
+ for tr in usedfilters: 
    # get trasm files only (dat extension only)
-   if fnmatch.fnmatch(tr, '*.dat'):
-     trasm=join(dirpath,tr)
+   #if fnmatch.fnmatch(tr, '*.dat'):
+     trasm=join(dirpath,tr+extension)
      #print '------------------ READ FILE -----------------'
      tar=loadtxt(trasm)
      tar=tar[tar[:,0].argsort()]    # ascending order
@@ -134,28 +142,31 @@ def main():
      # shit transm to redshift
      lamt=lamt/(1+redshift)
      # check if shifted trnasmisison is within data
-     if max(lamt) < max(lamm) and min(lamm) > min(lamm) :
+     if max(lamt) <= max(lamm) and min(lamt) >= min(lamm) :
         print trasm
         flut=tar[:,1]              
         # integrate over trasmission
-        phot=ift.main(lamm,fmod,lamt,flut)
+        phot=ift.main(lamm,lum,lamt,flut)
         leff=phot[0]   # micron
 	#aleff=angtomic(leff,sameunit)
 	bpass=phot[1]
 	luma=phot[2]   # l in erg/s/A
 	lumh=luma*((leff*1e4)**2)/cca   # l in erg/s/Hz  lumh=luma*(ang**2)/cca
-        photarr.append((leff,lumh,tr,mjd))
+        photarr.append((leff,lumh,tr,mjdmod))
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
         print '%1.2e' %  lumh + ' Lum in erg/s/Hz'
-        out.write('%4.4f\t%2.7e\t%s\t%s\n' %(leff,lumh,tr,mjd))
+        out.write('%4.4f\t%2.7e\t%s\t%s\n' %(leff,lumh,tr,mjdmod))
      else:
+	print 'warning: %.2f' % max(lamt) +'> %.2f' % max(lamm) +' or %.2f' % min(lamm) +'< %.2f' % min(lamm)     
         print '--' + trasm+' outside filter range'
-	photarr.append((nd,nd,tr,mjd))
-        out.write('%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,tr,mjd))
+	photarr.append((nd,nd,tr,mjdmod))
+        out.write('%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,tr,mjdmod))
 	
  out.close
  
  print photarr	 
+
+ return photarr	 
 
 #print '------------------ save data -----------------'
 #testfile='test.txt'
@@ -175,7 +186,7 @@ def main():
 #
 
 if __name__ == "__main__":
-   usage()
+   #usage()
    main()
 
 
