@@ -44,7 +44,8 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  
  # get input
  
- filterset = str(filterset)     # filter
+ #filterset = str(filterset)     # filter
+ #print filterset
  sameunit  = str(sameunit)
  redshift  = float(redshift)
  
@@ -97,15 +98,14 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  mjdmod=headsf[1].split()[3]  # mjd date from specfile 
   
  # initialize output data
- testfile='test'         #modname+'z'+str(redshift)+'_phot.dat'
- out=open(testfile,'w')
- header='#lambda[A]      f[Jy]      mag[AB]     name'
- out.write('%s\n' %header) 
+ #testfile='test'         #modname+'z'+str(redshift)+'_phot.dat'
+ #out=open(testfile,'w')
+ #out.write('%s\n' %header) 
  
  #---------------------------------------------------------
  # get trasmission files
  
- #get only names in a list
+ #get only names in a list: get only filternames which file extension is .dat!!!
  archivedfilternames=[]
  extension='.dat'
  for f in filenames:
@@ -116,11 +116,11 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  
  # compare two lists and get only matching filters
  usedfilters=[]
- for f in [filterset]:
+ for f in filterset:
 	 #print f
 	 if f in archivedfilternames:
 		 print 'filter exists: %s' % f
-		 usedfilters.append(f)
+		 usedfilters.append(f)                                   
 	 else:
 		 sys.exit("ERROR: Specified filter not found: %s" % f)
   
@@ -130,8 +130,6 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  photarr=[]
  nd=int(-99)                    # in case is not defined
  for tr in usedfilters: 
-   # get trasm files only (dat extension only)
-   #if fnmatch.fnmatch(tr, '*.dat'):
      trasm=join(dirpath,tr+extension)
      #print '------------------ READ FILE -----------------'
      tar=loadtxt(trasm)
@@ -143,7 +141,7 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
      lamt=lamt/(1+redshift)
      # check if shifted trnasmisison is within data
      if max(lamt) <= max(lamm) and min(lamt) >= min(lamm) :
-        print trasm
+        print '------------------- FILTER %s' % trasm +'----------------'
         flut=tar[:,1]              
         # integrate over trasmission
         phot=ift.main(lamm,lum,lamt,flut)
@@ -153,38 +151,21 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
 	luma=phot[2]   # l in erg/s/A
 	lumh=luma*((leff*1e4)**2)/cca   # l in erg/s/Hz  lumh=luma*(ang**2)/cca
         photarr.append((leff,lumh,tr,mjdmod))
+	print '------------------- FILTER PROPERTIES AND LUMINOSITY------------------'
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
         print '%1.2e' %  lumh + ' Lum in erg/s/Hz'
-        out.write('%4.4f\t%2.7e\t%s\t%s\n' %(leff,lumh,tr,mjdmod))
+        #out.write('%4.4f\t%2.7e\t%s\t%s\n' %(leff,lumh,tr,mjdmod))
      else:
 	print 'warning: %.2f' % max(lamt) +'> %.2f' % max(lamm) +' or %.2f' % min(lamm) +'< %.2f' % min(lamm)     
         print '--' + trasm+' outside filter range'
 	photarr.append((nd,nd,tr,mjdmod))
-        out.write('%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,tr,mjdmod))
+        #out.write('%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,tr,mjdmod))
 	
- out.close
+ #out.close
  
- print photarr	 
+ #print photarr	 
 
  return photarr	 
-
-#print '------------------ save data -----------------'
-#testfile='test.txt'
-#out=open(testfile,'w')
-##lb=[0*x for x in range (0,int(ln))]
-##mb=[0*x for x in range (0,int(ln))]
-#
-#j=0
-#nf=len(filenames)
-# while j<=nf-1:
-#       #print j
-#	out.write('%4.4f\t%2.7e\t%s\n' %(photarr[j][0],photarr[j][1],photarr[j][2]))
-#	j=j+1
-#
-#out.close
-#
-#
-
 if __name__ == "__main__":
    #usage()
    main()

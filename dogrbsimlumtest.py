@@ -70,12 +70,13 @@ def main():
  #check unit is correct
  checkunit=angtomic(1,sameunit)
 
- # handle paths
+ # handle paths model
  if os.path.isfile(modelfile):
 	(dirmod, modname)=os.path.split(modelfile)
  else:	 
        sys.exit("ERROR: Specified file not found: %s" % modelfile)
- 		
+
+ # handle paths trasmissions and put names to list		
  if os.path.isfile(mytrasm):
     (dirpath, file) = os.path.split(mytrasm)
     filenames=[file]
@@ -110,14 +111,13 @@ def main():
  #---------------------------------------------------------
  # get trasmission files
  
- #get only names in a list
+ #get only names in a list: get only filternames which file extension is .dat!!!
  archivedfilternames=[]
  extension='.dat'
  for f in filenames:
 	 if fnmatch.fnmatch(f,'*'+extension):
 		 archivedfilternames.append(os.path.splitext(f)[0])
 	 
- #print "archived filter names", archivedfilternames
  
  # compare two lists and get only matching filters
  usedfilters=[]
