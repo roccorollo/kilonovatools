@@ -1,0 +1,21 @@
+# table with specified filters used
+#1col: name in db
+#2col: name of trasmission file in folder trasm (without .dat)
+#
+J     	micParanal_HAWKI.J
+g     	micSLOAN_SDSS.g
+z*    	micSLOAN_SDSS.z
+I     	micGeneric_Bessell.I
+H     	micParanal_HAWKI.H
+K     	micUKIRT_UKIDSS.K
+Rc    	R_Cousins
+i*    	micSLOAN_SDSS.i
+Ks    	micParanal_HAWKI.Ks
+R     	micGeneric_Bessell.R
+F160W 	hst_wfc3_ir_f160w
+V     	micGeneric_Bessell.V
+Y     	micParanal_HAWKI.Y
+F814W 	hst_wfc3_uvis_f814w
+B     	micGeneric_Bessell.B
+Z     	micUKIRT_UKIDSS.Z
+r*    	micSLOAN_SDSS.r 

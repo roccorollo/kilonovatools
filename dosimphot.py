@@ -185,7 +185,7 @@ def main():
 #
 #j=0
 #nf=len(filenames)
-# while j<=nf-1:
+#while j<=nf-1:
 #       #print j
 #	out.write('%4.4f\t%2.7e\t%s\n' %(photarr[j][0],photarr[j][1],photarr[j][2]))
 #	j=j+1

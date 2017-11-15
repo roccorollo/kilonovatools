@@ -16,7 +16,7 @@ def usage():
     #print __Usage__
     #print __Notes__
 
-def main( modelfile,mytrasm, sameunit, redshift, filterset):
+def main( modelfile,mytrasm, sameunit, redshift, filters):
  	
  ##---------------------------------------------------------
  #Import packages
@@ -24,7 +24,6 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  from os import walk, sys, path
  from os.path import join
  import fnmatch
- #from os import sys, walk
  import platform
  import subprocess
  from scipy.constants import speed_of_light
@@ -44,8 +43,8 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  
  # get input
  
- #filterset = str(filterset)     # filter
- #print filterset
+ #filters = str(filters)     # filter
+ #print filters
  sameunit  = str(sameunit)
  redshift  = float(redshift)
  
@@ -67,16 +66,16 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  checkunit=angtomic(1,sameunit)
 
  # handle paths
- if os.path.isfile(modelfile):
-	(dirmod, modname)=os.path.split(modelfile)
- else:	 
-       sys.exit("ERROR: Specified file not found: %s" % modelfile)
+ #if os.path.isfile(modelfile):
+ #	(dirmod, modname)=os.path.split(modelfile)
+ #else:	 
+ #      sys.exit("ERROR: Specified file not found: %s" % modelfile)
  		
  if os.path.isfile(mytrasm):
     (dirpath, file) = os.path.split(mytrasm)
-    filenames=[file]
+    trasmnames=[file]
  elif os.path.isdir(mytrasm):
-	(dirpath, dirnames, filenames) = walk(mytrasm).next()
+	(dirpath, dirnames, trasmnames) = walk(mytrasm).next()
  else:
       sys.exit("ERROR: Specified file/directory not found: %s" % mytrasm)
 
@@ -108,15 +107,15 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
  #get only names in a list: get only filternames which file extension is .dat!!!
  archivedfilternames=[]
  extension='.dat'
- for f in filenames:
-	 if fnmatch.fnmatch(f,'*'+extension):
-		 archivedfilternames.append(os.path.splitext(f)[0])
+ for f in trasmnames:
+	if fnmatch.fnmatch(f,'*'+extension):
+		archivedfilternames.append(os.path.splitext(f)[0])
 	 
  #print "archived filter names", archivedfilternames
  
  # compare two lists and get only matching filters
  usedfilters=[]
- for f in filterset:
+ for f in filters:
 	 #print f
 	 if f in archivedfilternames:
 		 print 'filter exists: %s' % f
@@ -141,7 +140,7 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
      lamt=lamt/(1+redshift)
      # check if shifted trnasmisison is within data
      if max(lamt) <= max(lamm) and min(lamt) >= min(lamm) :
-        print '------------------- FILTER %s' % trasm +'----------------'
+        print '-- FILTER %s' % trasm 
         flut=tar[:,1]              
         # integrate over trasmission
         phot=ift.main(lamm,lum,lamt,flut)
@@ -151,7 +150,7 @@ def main( modelfile,mytrasm, sameunit, redshift, filterset):
 	luma=phot[2]   # l in erg/s/A
 	lumh=luma*((leff*1e4)**2)/cca   # l in erg/s/Hz  lumh=luma*(ang**2)/cca
         photarr.append((leff,lumh,tr,mjdmod))
-	print '------------------- FILTER PROPERTIES AND LUMINOSITY------------------'
+	print 'FILTER PROPERTIES AND LUMINOSITY'
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
         print '%1.2e' %  lumh + ' Lum in erg/s/Hz'
         #out.write('%4.4f\t%2.7e\t%s\t%s\n' %(leff,lumh,tr,mjdmod))

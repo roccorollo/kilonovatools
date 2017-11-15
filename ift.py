@@ -44,7 +44,7 @@ def main(lamm,flum,lamt,flut):
  print 'length of interpolated model is ', len(moint)
  print 'length of transmission file is', len(lamt)
  
- print '------------------ COMPUTE INTEGRAL -----------------'
+ print 'COMPUTE INTEGRAL'
  
  # filter characteristics:
  ltr=flut*lamt

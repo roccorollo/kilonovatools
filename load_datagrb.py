@@ -1,11 +1,3 @@
-"""
-
-    Author: G. Stratta
-
-    Purpose: load data of short GRB afterglow from mysql data base on gravitwon
-    
-"""
-
 import os
 import numpy as np
 import pandas as pd
@@ -26,7 +18,9 @@ data_array=data.values
 GRB=data_array[:,0]
 z=data_array[:,1]
 dhour=data_array[:,2]
-filt=data_array[:,3]
+flux=data_array[:,3]
+fluxerr=data_array[:,4]
+filter=data_array[:,5]
 
 data_grb=data_array[np.where(data_array[:,0]=='130603B'),:]
 
