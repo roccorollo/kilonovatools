@@ -77,6 +77,7 @@ def lumlcgrb(flux,fluxerr,z,dhour,nueffgrb):
     return lum,lumerr,dhour_rf,nueffgrbz
 
 def printoutput(GRB,filt,nueffgrbz,dhour_rf,lum,lumerr):
+    print'GRB,filt,nueffgrbz,dhour_rf,lum,lumerr'
     for i in range(0,len(GRB)):
         print GRB[i],filt[i],nueffgrbz[i],dhour_rf[i],lum[i],lumerr[i]
     return
