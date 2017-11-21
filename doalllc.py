@@ -1,3 +1,13 @@
+
+'''
+Take entry table table.txt and for each GRB gives LCs from models. Put then lightcurves in folder ./lc
+'''
+
+__Version__ = "0.1"
+__Author__ = "Andrea Rossi "
+
+
+
 import os
 import numpy as np
 import pandas as pd
@@ -9,7 +19,7 @@ import dolc_fromlum
 # function to search for filter transmission
 def searchtrasm(filters):
 	#read transmisison name conversion between database and trasm folder
-	tabfilt='nametrasm.dat'
+	tabfilt='trasm/nametrasm.txt'
 	dbfilters=[]
 	trasmfromarchive=[]  
 	with open(tabfilt,'r') as tf:
@@ -46,5 +56,7 @@ for g in GRBset:
 	ftrasm=searchtrasm(filters)                               
 	dolc_fromlum.main(grb,redshift,ftrasm)                   
 
+os.system("if [ -d  lc ]; then sleep 0.1; else mkdir lc; fi ")
+os.system("mv *lc.dat lc")
 
 

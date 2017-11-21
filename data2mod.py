@@ -67,6 +67,28 @@ def main():
  lamz=mar[:,0]
  flum=mar[:,1] 
  flum=trasmpos(flum)
+    
+ #------------- extract PARAMATER for date
+ head=[]
+ with open(datafile, 'r') as sf: 
+  for line in sf:                 
+    if line.startswith('#'):       
+      head.append(line)         
+      
+ ph0=str(head[2].split()[1])    # phase date from specfile 
+ ph1=str(head[2].split()[2])    # phase date from specfile 
+ ph2=float(head[2].split()[3])  # phase date from specfile 
+ phasemod=ph2/(1+redshift)
+
+ mjd0=str(head[1].split()[1])  # mjd date from specfile 
+ mjd1=str(head[1].split()[2])  # mjd date from specfile 
+ mjd2=float(head[1].split()[3])  # mjd date from specfile 
+ mjdmod=(mjd2-ph2)+phasemod
+
+ ut0=str(head[0].split()[1])  # ut date from specfile 
+ ut1=str(head[0].split()[2])  # ut date from specfile 
+ ut2=float(head[0].split()[3])  # ut date from specfile 
+ utmod=(ut2-ph2)+phasemod
 
 # get redshift and give luminosity distance 
 # redshift=0.01
@@ -78,9 +100,6 @@ def main():
 # from data to luminosity in erg/s/A
  lummod=lumflux.fergc2sA2luma(flum,distlum,redshift)    # already included *(1+redshift)
  lamm=lamz/(1+redshift) ## be sure that lambda unit is the same
-
- #print 'lum distance is ' + '%1.3f' %  distlum
- #flum
  
  
  print '------------------ save model -----------------'
@@ -90,10 +109,11 @@ def main():
  out=open(modelfile,'w')
  #lb=[0*x for x in range (0,int(ln))]
  #mb=[0*x for x in range (0,int(ln))]
- 
- header1='#PARAMETER MJD'
- header2='#lambda[A]      L[erg/s/A]'
- out.write('%s\n' %header1) 
+
+ header2='# lambda[A]      L[erg/s/A]'
+ out.write('# %s\t%s\t%.2f\n' %(ut0,ut1,utmod)) 
+ out.write('# %s\t%s\t%.2f\n' %(mjd0,mjd1,mjdmod)) 
+ out.write('# %s\t%s\t%.2f\n' %(ph0,ph1,phasemod)) 
  out.write('%s\n' %header2) 
  
  while j<=n-1:

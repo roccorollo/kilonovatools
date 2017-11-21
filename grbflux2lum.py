@@ -20,7 +20,8 @@ import numpy as np
 import pandas as pd
 import andNEDredshift
 
-path1='/Users/giulia/Documents/DRAFT/GRAWITA/GW170817/KN_AFTERGLOW/DATA/AG_SGRBs/'
+#path1='/Users/giulia/Documents/DRAFT/GRAWITA/GW170817/KN_AFTERGLOW/DATA/AG_SGRBs/'
+path1='/home/rossi/work/kilonova/tools/aux/'
 
 def read_db():
 
