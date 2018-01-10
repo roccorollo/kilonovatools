@@ -18,6 +18,7 @@ def main(grb,redshift,ftrasm):
 	import os
 	from os import walk, sys, path
 	from os.path import join
+	import fnmatch
 	
 	# import other prog
 	import dogrbsimlum                                        
@@ -49,9 +50,16 @@ def main(grb,redshift,ftrasm):
 	header='#lambda[A]  L[erg/s/Hz]         filter	     MJD'
 	out.write('%s\n' %header) 
 	
-	# cycle over models at different times and get lc of KN model
+	#-- cycle over models at different times and get lc of KN model
 	grblc=[]	
-	modelsorted=sorted(modelnames, key=str.lower, reverse=False) # just for easier visualization
+	# first get only files with right extension
+	extension='.dat'
+	modelnamesdat=[]
+	for f in modelnames:
+		if fnmatch.fnmatch(f,'*'+extension):
+			modelnamesdat.append(f)
+		
+	modelsorted=sorted(modelnamesdat, key=str.lower, reverse=False) # just for easier visualization
 	for m in modelsorted:
 		print '--------------------  MODEL IS %s' % m 
 		modelfile=join(dirpath,m)

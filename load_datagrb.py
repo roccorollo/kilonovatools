@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 
-#password: BOgw_2017
+#password: WG_p@ss17
 
 def load_data():
     return os.system("ssh gwbologna@gravitown.oaroma.inaf.it \"mysql MisceCats -e \'select GRB,z,dhour,Flux,Fluxerr,filter from sgrb;\' \" > table.txt")

@@ -32,6 +32,9 @@ cca=cc*10**10 ##angstrom /s
 zpab=8.926    ## zp for flux in Jy
 ##---------------------------------------------------------
 ## constants
+def luma2lumh(ang,luma):
+	lumh=luma*(ang**2)/cca 
+	return lumh
  
 def luma2fjy(ang,luma,mpc,z):
     lumh=luma*(ang**2)/cca
@@ -52,9 +55,15 @@ def fergc2sA2fjy(fergc2sA,ang):
      
 #------------reverse
 
+def lumh2luma(ang,lumh):
+	luma=lumh/(ang**2)*cca 
+	return luma
+
 def fjy2luma(ang,fjy,mpc,z):
-     lumh=fjy*10**(-23) * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) / (1+z)
-     luma=lumh*cca/(ang**2)
+     #lumh=fjy*10**(-23) * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) / (1+z)
+     #ang_rest=ang/(1+z)
+     #luma=lumh*cca/(ang_rest**2)
+     luma= fjy* 10**(-23)*cca/(ang**2)  * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) * (1+z)
      return luma
      
 def mab2fjy(mab):
@@ -69,6 +78,9 @@ def fjy2fergc2sA(fjy,ang):
     fergc2sA =fjy* 10**(-23)*cca/(ang**2)
     return fergc2sA
      
+     
+   
+
 
 #
 #if __name__ == "__main__":

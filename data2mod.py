@@ -111,8 +111,8 @@ def main():
  #mb=[0*x for x in range (0,int(ln))]
 
  header2='# lambda[A]      L[erg/s/A]'
- out.write('# %s\t%s\t%.2f\n' %(ut0,ut1,utmod)) 
- out.write('# %s\t%s\t%.2f\n' %(mjd0,mjd1,mjdmod)) 
+ out.write('# %s\t%s OBS \t%.2f\n' %(ut0,ut1,ut2))    # observed UT
+ out.write('# %s\t%s OBS \t%.2f\n' %(mjd0,mjd1,mjd2)) # observed MJD
  out.write('# %s\t%s\t%.2f\n' %(ph0,ph1,phasemod)) 
  out.write('%s\n' %header2) 
  

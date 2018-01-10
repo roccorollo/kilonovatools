@@ -16,7 +16,7 @@ def usage():
     #print __Usage__
     #print __Notes__
 
-def main():
+def main(modelfile,mypath,sameunit,redshift):
  	
  ##---------------------------------------------------------
  #Import packages
@@ -49,10 +49,10 @@ def main():
  
  ############ get input
  
- modelfile = sys.argv[1]
- mypath    = sys.argv[2]
- sameunit  = sys.argv[3]
- redshift  = sys.argv[4]
+ #modelfile = sys.argv[1]
+ #mypath    = sys.argv[2]
+ #sameunit  = sys.argv[3]
+ #redshift  = sys.argv[4]
  sameunit  = str(sameunit)
  redshift  = float(redshift)
  
@@ -114,18 +114,19 @@ def main():
  
  #------------- extract PARAMATER for date
  headsf=[]
- with open(specfile, 'r') as sf:
+ with open(modelfile, 'r') as sf:
   for line in sf:
     if line.startswith('#'):
       headsf.append(line)         
       
- mjd=headsf[1].split()[3]  # mjd date from specfile
+ mjd=float(headsf[1].split()[3])  # mjd date from specfile
+ print 'MJD is %s'   %  mjd 
   
- # initialize output data
- testfile=modname+'z'+str(redshift)+'_phot.dat'
- out=open(testfile,'w')
- header='#lambda[A]      f[Jy]      mag[AB]     name'
- out.write('%s\n' %header) 
+ ## initialize output data
+ #testfile=modname+'z'+str(redshift)+'_phot.dat'
+ #out=open(testfile,'w')
+ #header='#lambda[A]      f[Jy]      mag[AB]     name'
+ #out.write('%s\n' %header) 
  
  #---------------------------------------------------------
  # get trasmission files
@@ -167,15 +168,15 @@ def main():
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
         #print '%1.2e' %  flux + ' flux in erg/cm^2/s/Ang'
         print '%2.1f' %  magab + ' mag in AB'
-        out.write('%4.4f\t%2.7e\t%2.2f\t%s\t%s\n' %(leff,fjy,magab,tr,mjd))
+        #out.write('%4.4f\t%2.7e\t%2.2f\t%s\t%f\n' %(leff,fjy,magab,tr,mjd))
      else:
         print '--' + trasm+' outside filter range'
 	photarr.append((nd,nd,nd,tr,mjd))
-        out.write('%2.0f\t%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,-99,tr,mjd))
+        #out.write('%2.0f\t%2.0f\t%2.0f\t%s\t%f\n' %(-99,-99,-99,tr,mjd))
 	
- out.close
+ #out.close
  
- print photarr	 
+ return photarr	 
 
 #print '------------------ save data -----------------'
 #testfile='test.txt'

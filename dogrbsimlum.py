@@ -94,7 +94,7 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
     if line.startswith('#'):       
       headsf.append(line)         
       
- mjdmod=headsf[1].split()[3]  # mjd date from specfile 
+ mjdmod=headsf[1].split()[4]  # mjd date from specfile 
   
  # initialize output data
  #testfile='test'         #modname+'z'+str(redshift)+'_phot.dat'
@@ -135,8 +135,8 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
      tar=tar[tar[:,0].argsort()]    # ascending order
      tar=tar[tar[:,1]>1e-2]         # only lambda for >1% transmission
      lamt=tar[:,0] ## be sure that lambda unit is the same
-     lamt=angtomic(lamt,sameunit)
-     # shit transm to redshift
+     lamt=angtomic(lamt,sameunit)  # in angstrom !!!
+     # shift transm to redshift
      lamt=lamt/(1+redshift)
      # check if shifted trnasmisison is within data
      if max(lamt) <= max(lamm) and min(lamt) >= min(lamm) :
@@ -144,11 +144,11 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
         flut=tar[:,1]              
         # integrate over trasmission
         phot=ift.main(lamm,lum,lamt,flut)
-        leff=phot[0]   # micron
+        leff=phot[0]   # ANGSTROM  !!!  HAI TRASFORMATO LAMT IN ANGSTROM SOPRA
 	#aleff=angtomic(leff,sameunit)
 	bpass=phot[1]
 	luma=phot[2]   # l in erg/s/A
-	lumh=luma*((leff*1e4)**2)/cca   # l in erg/s/Hz  lumh=luma*(ang**2)/cca
+	lumh=lumflux.luma2lumh(leff,luma)  # l in erg/s/Hz  lumh=luma*(ang**2)/cca
         photarr.append((leff,lumh,tr,mjdmod))
 	print 'FILTER PROPERTIES AND LUMINOSITY'
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'

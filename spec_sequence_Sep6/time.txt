@@ -1,4 +1,10 @@
+# Time= MJD  (T0 for GW trigger is MJD=57982.528)
 #UT     MJD      phase(days)
+17.54   57982.54  0.01	user_added
+17.58   57982.58  0.05	user_added
+17.63   57982.63  0.1	user_added
+18.03   57983.03  0.5	user_added
+18.53   57983.53  1.0	user_added
 18.97   57983.97  1.5	XS
 19.95   57984.95  2.5	GEMINI
 20.98   57985.98  3.5	XS
