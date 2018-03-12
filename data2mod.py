@@ -1,11 +1,10 @@
 
 '''
-Take spectra template and trasmission, and computes observed mag at given distance
+Transformed observed flux spectra to luminosity 
 '''
 
 __Version__ = "0.1"
 __Author__ = "Andrea Rossi "
-__Usage__ = "dosimphot.py data modelname redshift"
 
 import sys
 def usage():
@@ -73,22 +72,29 @@ def main():
  with open(datafile, 'r') as sf: 
   for line in sf:                 
     if line.startswith('#'):       
-      head.append(line)         
-      
- ph0=str(head[2].split()[1])    # phase date from specfile 
- ph1=str(head[2].split()[2])    # phase date from specfile 
- ph2=float(head[2].split()[3])  # phase date from specfile 
- phasemod=ph2/(1+redshift)
+	head.append(line)      
+	if 'PHASE' in  line:		   
+		ph0=str(line.split()[1])    # phase date from specfile 
+		ph1=str(line.split()[2])    # phase date from specfile 
+		ph2=float(line.split()[3])  # phase date from specfile 
+		#phasemod=ph2/(1+redshift)
+	if 'MJD' in  line:	
+		mjd0=str(line.split()[1])  # mjd date from specfile 
+		mjd1=str(line.split()[2])  # mjd date from specfile 
+		mjd2=float(line.split()[3])  # mjd date from specfile 
+		#mjdmod=(mjd2-ph2)+phasemod
+	if 'UT' in  line:	
+		ut0=str(line.split()[1])  # ut date from specfile 
+		ut1=str(line.split()[2])  # ut date from specfile 
+		ut2=float(line.split()[3])  # ut date from specfile 
+		#utmod=(ut2-ph2)+phasemod
+		
 
- mjd0=str(head[1].split()[1])  # mjd date from specfile 
- mjd1=str(head[1].split()[2])  # mjd date from specfile 
- mjd2=float(head[1].split()[3])  # mjd date from specfile 
+ phasemod=ph2/(1+redshift) 
  mjdmod=(mjd2-ph2)+phasemod
-
- ut0=str(head[0].split()[1])  # ut date from specfile 
- ut1=str(head[0].split()[2])  # ut date from specfile 
- ut2=float(head[0].split()[3])  # ut date from specfile 
  utmod=(ut2-ph2)+phasemod
+ 		
+		
 
 # get redshift and give luminosity distance 
 # redshift=0.01
@@ -96,6 +102,7 @@ def main():
  print 'luminosity distance is: %.2f ' % distlum + 'Mpc'
  #print 'The luminosity distance D_L is ' + '%1.2f' %  distlum
    
+ print '------------------ convert to Luminosity -----------------'
  
 # from data to luminosity in erg/s/A
  lummod=lumflux.fergc2sA2luma(flum,distlum,redshift)    # already included *(1+redshift)

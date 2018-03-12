@@ -92,10 +92,14 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
  with open(modelfile, 'r') as sf: 
   for line in sf:                 
     if line.startswith('#'):       
-      headsf.append(line)         
+        headsf.append(line)    
+	if 'PHASE' in  line:	
+		phasemod=line.split()[3]  # phase date from specfile 	   
+	if 'MJD' in  line:	 
+		mjdmod=line.split()[4]  # mjd observed! date from specfile 
+	if 'UT' in  line:
+		utmod=line.split()[4]  # ut observed! date from specfile 
       
- mjdmod=headsf[1].split()[4]  # mjd date from specfile 
-  
  # initialize output data
  #testfile='test'         #modname+'z'+str(redshift)+'_phot.dat'
  #out=open(testfile,'w')
@@ -138,10 +142,10 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
      lamt=angtomic(lamt,sameunit)  # in angstrom !!!
      # shift transm to redshift
      lamt=lamt/(1+redshift)
+     flut=tar[:,1]              
      # check if shifted trnasmisison is within data
      if max(lamt) <= max(lamm) and min(lamt) >= min(lamm) :
         print '-- FILTER %s' % trasm 
-        flut=tar[:,1]              
         # integrate over trasmission
         phot=ift.main(lamm,lum,lamt,flut)
         leff=phot[0]   # ANGSTROM  !!!  HAI TRASFORMATO LAMT IN ANGSTROM SOPRA
@@ -149,22 +153,29 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
 	bpass=phot[1]
 	luma=phot[2]   # l in erg/s/A
 	lumh=lumflux.luma2lumh(leff,luma)  # l in erg/s/Hz  lumh=luma*(ang**2)/cca
-        photarr.append((leff,lumh,tr,mjdmod))
+        photarr.append((leff,lumh,tr,mjdmod,phasemod))
 	print 'FILTER PROPERTIES AND LUMINOSITY'
 	print '%1.2f' %  leff + ' effective wavelength in model spectral unit'
         print '%1.2e' %  lumh + ' Lum in erg/s/Hz'
-        #out.write('%4.4f\t%2.7e\t%s\t%s\n' %(leff,lumh,tr,mjdmod))
+        #out.write('%4.4f\t%2.7e\t%s\t%s\t%s\n' %(leff,lumh,tr,mjdmod,phasemod))
+     #if max(lamt) >= min(lamm) and min(lamm) >= min(lamt) :
+	## PUT transmission leff here. need to be computed outside from ift.main 
+	#filter=ift.trasm(lamt,flut)
+     #leff=filter[0]   # ANGSTROM  !!!  HAI TRASFORMATO LAMT IN ANGSTROM SOPRA    
+	#bpass=filter[1]
+	#print "TBD"	
      else:
 	print 'warning: %.2f' % max(lamt) +'> %.2f' % max(lamm) +' or %.2f' % min(lamm) +'< %.2f' % min(lamm)     
         print '--' + trasm+' outside filter range'
-	photarr.append((nd,nd,tr,mjdmod))
-        #out.write('%2.0f\t%2.0f\t%s\t%s\n' %(-99,-99,tr,mjdmod))
+	photarr.append((nd,nd,tr,mjdmod,phasemod))
+        #out.write('%2.0f\t%2.0f\t%s\t%s\t%s\n' %(-99,-99,tr,mjdmod,phasemod))
 	
  #out.close
  
  #print photarr	 
-
  return photarr	 
+ 
+ 
 if __name__ == "__main__":
    #usage()
    main()

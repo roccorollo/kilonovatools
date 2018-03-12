@@ -14,6 +14,30 @@ import sys
 def usage():
     print __Usage__
 
+def trasm(lamt,flut):
+ ##---------------------------------------------------------
+ #Import packages
+ import os
+ #from scipy.interpolate import splprep, splev
+ from scipy.interpolate import interp1d
+ from scipy.integrate import trapz as  integ
+ from numpy import loadtxt, arange #,pi, log, linspace, convolve
+ 
+ 
+ ln=len(lamt)
+ # filter characteristics:
+ ltr=flut*lamt
+ tint = integ(flut,lamt) # surface
+ lef = integ(ltr,lamt) /tint # effective wavelength
+ delta=flut*((lamt-lef)**2)
+ dint = 2*(integ(delta,lamt) /tint)**(0.5)  # whole bandpass
+ # result
+ res=[0*x for x in range (0,3)]
+ res[0]=lef
+ res[1]=dint
+ res[2]=tint
+ return res
+
 def main(lamm,flum,lamt,flut):
  	
  ##---------------------------------------------------------

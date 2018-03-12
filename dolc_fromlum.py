@@ -30,7 +30,8 @@ def main(grb,redshift,ftrasm):
 	redshift  = float(redshift)
 	#ftrasm = str(ftrasm).split(',')     # filters as list
 	
-	models='gw170817fromXSdata'  # where models at different times are
+	#models='gw170817fromXSdata'  # where models at different times are
+	models='gw170817superspectra'  # where models at different times are
 	mytrasm='trasm'    #  where trasnmissions are
 	trangmic='mic'   # USED MICRONS IN TRASMISSIONS (otehrwise write ~angstroms)
 	
@@ -47,7 +48,7 @@ def main(grb,redshift,ftrasm):
 	#initialize output data
 	grblcfile=grb+'lc.dat'         
 	out=open(grblcfile,'w')
-	header='#lambda[A]  L[erg/s/Hz]         filter	     MJD'
+	header='#lambda[A]  L[erg/s/Hz]         filter	     MJD-OBS   PHASE-REST'
 	out.write('%s\n' %header) 
 	
 	#-- cycle over models at different times and get lc of KN model
@@ -71,7 +72,7 @@ def main(grb,redshift,ftrasm):
 	
 	# write output lc for each GRB	
 	for item in grblc:
-		out.write('%.2f\t%.7e\t%s\t%s\n' %(item[0],item[1],item[2],item[3]))
+		out.write('%.2f\t%.7e\t%s\t%s\t%s\n' %(item[0],item[1],item[2],item[3],item[4]))
 	
 	out.close
 
