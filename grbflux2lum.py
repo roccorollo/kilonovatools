@@ -8,8 +8,9 @@
 """
 print 'Commands:'
 print ''
+print 'run plotlum.py'
 print 'GRB,z,filt,nueffgrb,flux,fluxerr,dhour=grbflux2lum.read_db()'
-print '   password: BOgw_2017 '
+print '   password: WG_p@ss17'
 
 print 'lum,lumerr,dhour_rf,nueffgrbz=grbflux2lum.lumlcgrb(flux,fluxerr,z,dhour,nueffgrb)'
 print 'grbflux2lum.printoutput(GRB,filt,nueffgrbz,dhour_rf,lum,lumerr)'
@@ -20,21 +21,22 @@ import numpy as np
 import pandas as pd
 import andNEDredshift
 
-#path1='/Users/giulia/Documents/DRAFT/GRAWITA/GW170817/KN_AFTERGLOW/DATA/AG_SGRBs/'
-path1='/home/rossi/work/kilonova/tools/aux/'
+# path where there are the Instrumental Effective Frequency table
+path1='/Users/giulia/Documents/DRAFT/GRAWITA/GW170817/KN_AFTERGLOW/DATA/AG_SGRBs/'
+#path1='/home/rossi/work/kilonova/tools/aux/'
 
 def read_db():
 
 #   read data from sgrb DB on gravitown saved on table.txt created with load_data()
 #   (If table already exists, than it can be commented)
-    os.system("ssh gwbologna@gravitown.oaroma.inaf.it \"mysql MisceCats -e \'select GRB,z,dhour,Flux,Fluxerr,filter from sgrb;\' \" > tablegrb.txt")
-    data=pd.read_csv('tablegrb.txt',sep='\t', header='infer',skiprows=None,skip_blank_lines=True)
+#    os.system("ssh gwbologna@gravitown.oaroma.inaf.it \"mysql MisceCats -e \'select GRB,z,dhour,Flux,Fluxerr,filter from sgrb;\' \" > tablegrb.txt")
+    data=pd.read_csv('table.txt',sep='\t', header='infer',skiprows=None,skip_blank_lines=True)
     data_array=data.values
     GRB=data_array[:,0]
     z=data_array[:,1]
     dhour=data_array[:,2]
-    flux=data_array[:,3]*1.e-26
-    fluxerr=data_array[:,4]*1.e-26
+    flux=data_array[:,3]*1.e-29
+    fluxerr=data_array[:,4]*1.e-29
     filt=data_array[:,5]
 
 # Read filter's table and associated frequencies
@@ -77,17 +79,11 @@ def lumlcgrb(flux,fluxerr,z,dhour,nueffgrb):
     nueffgrbz=nueffgrb*(1+z)
     return lum,lumerr,dhour_rf,nueffgrbz
 
-def printoutput(GRB,filt,nueffgrbz,dhour_rf,lum,lumerr):
-    print'GRB,filt,nueffgrbz,dhour_rf,lum,lumerr'
+def printoutput(GRB,filt,nueffgrbz,dhour_rf,lum,lumerr,flux,fluxerr):
+    print'GRB,filt,nueffgrbz,dhour_rf,lum,lumerr,flux,fluxerr'
     for i in range(0,len(GRB)):
-        print GRB[i],filt[i],nueffgrbz[i],dhour_rf[i],lum[i],lumerr[i]
+        print GRB[i],filt[i],nueffgrbz[i],dhour_rf[i],lum[i],lumerr[i],flux[i],fluxerr[i]
     return
-
-
-
-
-
-
 
 
 #data_grb=data_array[np.where(data_array[:,0]=='130603B'),:]
