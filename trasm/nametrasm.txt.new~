@@ -4,13 +4,12 @@
 #
 J     	micParanal_HAWKI.J
 g*     	micSLOAN_SDSS.g
-r*    	micSLOAN_SDSS.r
-i*    	micSLOAN_SDSS.i
 z*    	micSLOAN_SDSS.z
 I     	micGeneric_Bessell.I
 H     	micParanal_HAWKI.H
 K     	micUKIRT_UKIDSS.K
 Rc    	R_Cousins
+i*    	micSLOAN_SDSS.i
 Ks    	micParanal_HAWKI.Ks
 R     	micGeneric_Bessell.R
 F160W 	hst_wfc3_ir_f160w
@@ -19,6 +18,7 @@ Y     	micParanal_HAWKI.Y
 F814W 	hst_wfc3_uvis_f814w
 B     	micGeneric_Bessell.B
 Zg     	micUKIRT_UKIDSS.Z
+r*    	micSLOAN_SDSS.r 
 F606W 	hst_wfc3_uvis_f606w
 F125W   hst_wfc3_ir_f125w
 uvu	micSwift_UVOT.U
@@ -28,3 +28,4 @@ w2 	micSwift_UVOT.UVM2
 m2 	micSwift_UVOT.UVM2
 w1	micSwift_UVOT.UVW1
 uvwhite	micSwift_UVOT.white
+

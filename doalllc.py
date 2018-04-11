@@ -20,14 +20,17 @@ import dolc_fromlum
 def searchtrasm(filters):
 	#read transmisison name conversion between database and trasm folder
 	tabfilt='trasm/nametrasm.txt'
+	#tabfilt='trasm/nametrasm.txt.old
 	dbfilters=[]
 	trasmfromarchive=[]  
 	with open(tabfilt,'r') as tf:
 		for line in tf:
 			l1=line.strip()
 			if not l1.startswith("#"):
+				#print l1
 				dbfilters.append(str(l1.split()[0]))
 				trasmfromarchive.append(str(l1.split()[1]))
+				#print str(l1.split()[0]),str(l1.split()[1])
 	#search
 	ftrasm=[]
 	for f in filters:
@@ -40,6 +43,7 @@ def searchtrasm(filters):
 def read_data(file):
     return pd.read_csv(file,sep='\t', header='infer',skiprows=None,skip_blank_lines=True)
 
+#data=read_data('test.txt')
 data=read_data('table.txt')
 data_array=data.values
 
@@ -53,7 +57,7 @@ for g in GRBset:
 	print ' ----------------------------- GRB %s' % grb + '------------------------------'
 	redshift=data_grb[0][1]
 	filters=set([x[5] for x in data_grb])               #(comma separated list of unique filters)
-	ftrasm=searchtrasm(filters)                               
+	ftrasm=searchtrasm(filters)  
 	dolc_fromlum.main(grb,redshift,ftrasm)                   
 
 os.system("if [ -d  lc ]; then sleep 0.1; else mkdir lc; fi ")
