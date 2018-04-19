@@ -24,7 +24,7 @@ F125W   hst_wfc3_ir_f125w
 uvu	micSwift_UVOT.U
 uvb	micSwift_UVOT.B
 uvv	micSwift_UVOT.V
-w2 	micSwift_UVOT.UVM2
-m2 	micSwift_UVOT.UVM2
-w1	micSwift_UVOT.UVW1
+uvw2 	micSwift_UVOT.UVM2
+uvm2 	micSwift_UVOT.UVM2
+uvw1	micSwift_UVOT.UVW1
 uvwhite	micSwift_UVOT.white
