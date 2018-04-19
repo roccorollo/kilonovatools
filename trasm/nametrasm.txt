@@ -18,7 +18,7 @@ V     	micGeneric_Bessell.V
 Y     	micParanal_HAWKI.Y
 F814W 	hst_wfc3_uvis_f814w
 B     	micGeneric_Bessell.B
-Zg     	micUKIRT_UKIDSS.Z
+Zg     	micUKIRT_UKIDSS.Zg
 F606W 	hst_wfc3_uvis_f606w
 F125W   hst_wfc3_ir_f125w
 uvu	micSwift_UVOT.U
