@@ -9,12 +9,17 @@ __Author__ = "Andrea Rossi "
 
 
 import os
+import sys
 import numpy as np
 import pandas as pd
 from numpy import loadtxt
 
 # import local module
 import dolc_fromlum
+
+# import tabel from mysql db:
+os.system("mysql -u rossi -p981424r MisceCats -e \'select GRB,z,dhour,Flux,Fluxerr,filter from sgrb ORDER BY GRB,filter;\' > tablegrb.txt")
+
 
 # function to search for filter transmission
 def searchtrasm(filters):
@@ -40,11 +45,21 @@ def searchtrasm(filters):
 	return ftrasm
 
 # function to read GRB data table
-def read_data(file):
-    return pd.read_csv(file,sep='\t', header='infer',skiprows=None,skip_blank_lines=True)
+def read_data(file,skiprows):
+    return pd.read_csv(file,sep='\t', header='infer',skiprows=skiprows,skip_blank_lines=True)
 
 #data=read_data('test.txt')
-data=read_data('table.txt')
+#
+if len(sys.argv)>1:
+	print "TEST"
+	os.system("cat test.txt >table+gw.txt")
+else:
+	os.system("grep -v '#' trasm/nametrasm.txt |awk '{print \"170817A\t0.00980\t0.0001\t0.0000001\t0.0001\t\"$1\"\t\"$1}' > GRB170817A.txt ")
+	os.system("grep -v '#' trasm/nametrasm.txt |awk '{print    \"GRB0\t0.00000\t0.0001\t0.0000001\t0.0001\t\"$1\"\t\"$1}' > defaultz0.txt ")
+	os.system("cat table.txt GRB170817A.txt defaultz0.txt>table+gw.txt")
+	#os.system("echo # >table+gw.txt; cat GRB170817A.txt defaultz0.txt>table+gw.txt")
+	
+data=read_data('table+gw.txt',1)
 data_array=data.values
 
 GRB=data_array[:,0]
@@ -52,11 +67,11 @@ GRB=data_array[:,0]
 # compute lightcurves for each GRB
 GRBset=set(GRB)   # unique list of GRBs
 for g in GRBset:
-	data_grb=data_array[np.where(data_array[:,0]==g),:][0]
+	data_grb=data_array[ np.where(data_array[:,0]==g ),:][0]
 	grb=g
 	print ' ----------------------------- GRB %s' % grb + '------------------------------'
 	redshift=data_grb[0][1]
-	filters=set([x[5] for x in data_grb])               #(comma separated list of unique filters)
+	filters=set([x[6] for x in data_grb])               #(comma separated list of unique filters)
 	ftrasm=searchtrasm(filters)  
 	dolc_fromlum.main(grb,redshift,ftrasm)                   
 
