@@ -68,7 +68,10 @@ def main(grb,redshift,ftrasm):
 		grblc+=grblum
 		
 	print ' check output'	
+	
+	grblc=sorted(grblc)
 	print grblc
+	
 	
 	# write output lc for each GRB	
 	for item in grblc:

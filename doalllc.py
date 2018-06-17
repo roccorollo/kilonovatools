@@ -16,9 +16,12 @@ from numpy import loadtxt
 
 # import local module
 import dolc_fromlum
+#import write_newtablegrb.py
 
 # import tabel from mysql db:
 os.system("mysql -u rossi -p981424r MisceCats -e \'select GRB,z,dhour,Flux,Fluxerr,filter from sgrb ORDER BY GRB,filter;\' > tablegrb.txt")
+os.system("python write_newtablegrb.py")
+os.system("date=$(date '+%Y-%m-%d');rm table.txt; cp tablegrb.txt table${date}.txt;  ln -s table${date}.txt table.txt ")
 
 
 # function to search for filter transmission

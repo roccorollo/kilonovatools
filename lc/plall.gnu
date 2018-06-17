@@ -48,10 +48,8 @@ set tics scale 2
 set my2tics 5
 #set format x "%.0e"
 #set format x2 "%.0e"
-#set format y "%.0f"
 set format y2 "%.0f"
-
-
+set format y "10^{%L}"
 
 
 xmin=0.3
@@ -64,18 +62,29 @@ set yrange [ymin:ymax]
 set y2range [mabs(ymin):mabs(ymax)]
 
 pl \
-   "<(grep 'micSwift_UVOT.UVU'    GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "blue"   title "u",\
-   "<(grep 'micSLOAN_SDSS.g'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "green"  title "g",\
-   "<(grep 'micSLOAN_SDSS.r'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "red"    title "r",\
-   "<(grep 'micSLOAN_SDSS.i'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "orange" title "i",\
-   "<(grep 'micSLOAN_SDSS.z'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "olive"  title "z",\
-   "<(grep 'micParanal_HAWKI.J'   GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "brown"  title "J",\
-   "<(grep 'micParanal_HAWKI.H'   GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "black"  title "H",\
-   "<(grep 'micParanal_HAWKI.Ks'  GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "violet" title "Ks",\
+   "<(grep 'micGeneric_Bessell.U'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "blue"   title "U",\
+   "<(grep 'micGeneric_Bessell.B'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "green"  title "B",\
+   "<(grep 'micGeneric_Bessell.V'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "red"    title "V",\
+   "<(grep 'micGeneric_Bessell.R'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "orange" title "R",\
+   "<(grep 'micGeneric_Bessell.I'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "olive"  title "I",\
+   "<(grep 'micParanal_HAWKI.J'        GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "brown"  title "J",\
+   "<(grep 'micParanal_HAWKI.H'        GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "black"  title "H",\
+   "<(grep 'micParanal_HAWKI.Ks'       GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lt 1 lw 4 lc rgb "violet" title "Ks",\
    x*0  notitle w l axis x1y2,\
    x*0  notitle w l axis x2y1
 
 
+#pl \
+#   "<(grep 'micSwift_UVOT.UVU'    GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "blue"   title "u",\
+#   "<(grep 'micSLOAN_SDSS.g'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "green"  title "g",\
+#   "<(grep 'micSLOAN_SDSS.r'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "red"    title "r",\
+#   "<(grep 'micSLOAN_SDSS.i'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "orange" title "i",\
+#   "<(grep 'micSLOAN_SDSS.z'      GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "olive"  title "z",\
+#   "<(grep 'micParanal_HAWKI.J'   GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "brown"  title "J",\
+#   "<(grep 'micParanal_HAWKI.H'   GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "black"  title "H",\
+#   "<(grep 'micParanal_HAWKI.Ks'  GRB0lc.dat | sort -gk4)" u ($4-t0):2 w l lw 4 lc rgb "violet" title "Ks",\
+#   x*0  notitle w l axis x1y2,\
+#   x*0  notitle w l axis x2y1
 
 set term pngcairo font "Helvetica,14"  
 set encoding iso_8859_1 
