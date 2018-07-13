@@ -52,6 +52,12 @@ def l2fergc2sA(luma,mpc,z):
 def fergc2sA2fjy(fergc2sA,ang):
     fjy=10**23* fergc2sA *(ang**2)/cca
     return fjy
+    
+    
+def lumh2fjy(lumh,mpc,z):
+    fjy=10**23* lumh / ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) * (1+z)
+    return fjy
+   
      
 #------------reverse
 
@@ -79,6 +85,9 @@ def fjy2fergc2sA(fjy,ang):
     return fergc2sA
      
      
+def fjy2lumh(fjy,mpc,z):
+     lumh= fjy* 10**(-23) * ( 4 * pi * ( mpc * 3.08568 * 10**24 ) **2 ) / (1+z)
+     return lumh
    
 
 

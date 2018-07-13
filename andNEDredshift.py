@@ -36,7 +36,7 @@ def distlum(redshift):
   WK = 1-WM-WR-WV
   n=10000         # number of points in integrals
 
-  print '------------------ COMPUTE DISTANCE -----------------'
+  #print '------------------ COMPUTE DISTANCE -----------------'
 
   # do integral over a=1/(1+z) from az to 1 in n steps, midpoint rule
   for i in range(n):
