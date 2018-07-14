@@ -31,8 +31,10 @@ def read_db():
     GRB_w=data_array[:,0]
     z_w=data_array[:,1]
     dhour_w=data_array[:,2]
-    flux_w=data_array[:,3]*1.e-29
-    fluxerr_w=data_array[:,4]*1.e-29
+    #flux_w=data_array[:,3]*1.e-29
+    #fluxerr_w=data_array[:,4]*1.e-29
+    flux_w=data_array[:,3]*1
+    fluxerr_w=data_array[:,4]*1
 
     # Does not read GRB data in white filter
     white_str='uvwhite'
