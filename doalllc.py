@@ -59,10 +59,10 @@ if len(sys.argv)>1:
 else:
 	os.system("grep -v '#' trasm/nametrasm.txt |awk '{print \"170817A\t0.00980\t0.0001\t0.0000001\t0.0001\t\"$1\"\t\"$1}' > GRB170817A.txt ")
 	os.system("grep -v '#' trasm/nametrasm.txt |awk '{print    \"GRB0\t0.00000\t0.0001\t0.0000001\t0.0001\t\"$1\"\t\"$1}' > defaultz0.txt ")
-	os.system("cat table.txt GRB170817A.txt defaultz0.txt>table+gw.txt")
+	os.system("cat table.txt GRB170817A.txt defaultz0.txt>table+gw.txt")                                                                      
 	#os.system("echo # >table+gw.txt; cat GRB170817A.txt defaultz0.txt>table+gw.txt")
 	
-data=read_data('table+gw.txt',1)
+data=read_data('table+gw.txt',0)
 data_array=data.values
 
 GRB=data_array[:,0]
