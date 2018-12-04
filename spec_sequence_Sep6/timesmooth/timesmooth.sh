@@ -1,6 +1,6 @@
 
 ut="# PARAMETER UT     ";
-mjd="## PARAMETER MJD    "
+mjd="# PARAMETER MJD    "
 pha="# PARAMETER PHASE  "
 
 for f in X*dat; 

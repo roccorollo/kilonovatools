@@ -1,4 +1,5 @@
 #lambda[A]  L[erg/s/Hz]         filter	     MJD-OBS   PHASE-REST
+-99.00	-9.9000000e+01	micGeneric_Bessell.I	57983.03	0.50
 5049.88	7.1230788e+24	micGeneric_Bessell.I	57993.97	11.39
 5049.88	1.0230485e+25	micGeneric_Bessell.I	57992.97	10.40
 5049.88	1.0419592e+25	micGeneric_Bessell.I	57991.97	9.41
@@ -10,5 +11,5 @@
 5049.88	4.3757301e+25	micGeneric_Bessell.I	57985.98	3.47
 5049.88	1.1712676e+26	micGeneric_Bessell.I	57984.98	2.43
 5049.88	4.1665360e+26	micGeneric_Bessell.I	57983.97	1.49
-5049.88	7.1857181e+26	micGeneric_Bessell.I	57983.53	0.99
-5049.88	1.4971887e+27	micGeneric_Bessell.I	57983.03	0.50
+5049.88	7.1972640e+26	micGeneric_Bessell.I	57983.53	0.99
+5049.88	1.0486824e+27	micGeneric_Bessell.I	57983.17	0.64
