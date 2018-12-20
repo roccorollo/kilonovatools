@@ -8,9 +8,11 @@ ckm=cc/1000 ## km/s
 ccm=cc*100 ## cm/s
 cca=cc*10**10 ##angstrom /s
 t0=57982.528
+zpab=8.926
+
 
 # with x is lumh [erg/s /Hz]
-mabs(x)=2.5*log10((3.08568 * 10**24 * 10**-5)**2*4*pi) -2.5*23-2.5*log10(x)
+mabs(x)=2.5*log10((3.08568 * 10**24 * 10**-5)**2*4*pi) -2.5*23-2.5*log10(x) +zpab
 
 # PLOT
 #set term pngcairo font "Helvetica,14"  

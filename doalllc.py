@@ -78,6 +78,7 @@ for g in GRBset:
 	ftrasm=searchtrasm(filters)  
 	dolc_fromlum.main(grb,redshift,ftrasm)                   
 
+os.system("for i in *lc.dat; do awk '{if ($1!=-99) print}' $i>new$i; done")
 os.system("if [ -d  lc ]; then sleep 0.1; else mkdir lc; fi ")
 os.system("mv *lc.dat lc")
 

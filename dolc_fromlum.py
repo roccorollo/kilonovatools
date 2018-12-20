@@ -70,7 +70,9 @@ def main(grb,redshift,ftrasm):
 	print ' check output'	
 	
 	grblc=sorted(grblc)
-	print grblc
+	import operator
+	grblc=sorted(grblc, key = operator.itemgetter(0, 4))
+	#print grblc
 	
 	
 	# write output lc for each GRB	

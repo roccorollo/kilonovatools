@@ -130,6 +130,11 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
  # cycle over transmissions and give photometry
  print '--CYCLE over filters used by GRB and give photometry--'
  
+ # take element for sort
+ #def takeelem(elem):
+ #	return lambda x: elem 
+	
+ 
  photarr=[]
  nd=int(-99)                    # in case is not defined
  for tr in usedfilters: 
@@ -172,7 +177,8 @@ def main( modelfile,mytrasm, sameunit, redshift, filters):
 	
  #out.close
  
- #print photarr	 
+ #print photarr	
+ #photarr=sorted(photarr, key=takeelem(4)) 
  return photarr	 
  
  
